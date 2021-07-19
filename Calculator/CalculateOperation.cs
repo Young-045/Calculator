@@ -11,6 +11,7 @@ namespace Calculator
 {
     class CalculateOperation
     {
+        private int gitTest = 0;
         private string operation = "", singleProcess = "";
         private bool secNumberBegin = false, doubleContinuity = false, singleContinuity = false, invalidOperation = false;
         private float resultNum = 0, operationNum = 0;
