@@ -3,15 +3,40 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:MyNamespace="clr-namespace:Calculator"
         xmlns:local="clr-namespace:Calculator"
         mc:Ignorable="d"
         Title="Calculator" Width="400" Height="560" MinHeight="560" MinWidth="400" KeyDown="Window_KeyDown">
 
     <Window.Resources>
+
         <local:NoHistoryConver x:Key="NoHisConver"/>
         <local:HistoryConver x:Key="HisConver"/>
         <BooleanToVisibilityConverter x:Key="boolToVis"></BooleanToVisibilityConverter>
+
+        <Style x:Key="NumButton" TargetType="Button">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Background" Value="#FCFCFC"/>
+            <Setter Property="Margin" Value="1"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+
+        <Style x:Key="DoubleButton" TargetType="Button">
+            <Setter Property="Control.FontSize" Value="25"/>
+            <Setter Property="Control.FontWeight" Value="Light"/>
+            <Setter Property="Control.Background" Value="#F5F5F5"/>
+            <Setter Property="Margin" Value="1"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+
+        <Style x:Key="OrdinaryButton" TargetType="Button">
+            <Setter Property="Control.FontSize" Value="17"/>
+            <Setter Property="Control.FontWeight" Value="Light"/>
+            <Setter Property="Control.Background" Value="#F5F5F5"/>
+            <Setter Property="Margin" Value="1"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+
         <DataTemplate x:Key="HistoryItem">
             <Grid Margin="3">
                 <Grid.RowDefinitions>
@@ -24,9 +49,7 @@
         </DataTemplate>
     </Window.Resources>
 
-    
     <DockPanel Name="Root" LastChildFill="True" Background="#F0F0F0" SizeChanged="Root_SizeChanged">
-      
         <StackPanel Width="200" Name="SecPanel" DockPanel.Dock="Right" Visibility="Collapsed">
             <WrapPanel Margin="10,0,0,0">
                 <ToggleButton Name="HistoryButton" IsChecked="True" FontSize="15" FontWeight="Bold" Background="#f0f0f0" BorderThickness="0" Margin="0,0,10,0" Click="History_Click">历史记录</ToggleButton>
@@ -40,11 +63,9 @@
                              SelectionChanged="HistoryContent_SelectionChanged"  ItemTemplate="{StaticResource HistoryItem}"
                              Visibility="{Binding IsHistoryDelete,Converter={StaticResource boolToVis}}"   >
                         </ListBox>
-
                         <TextBlock Name="NoHistory" Visibility="{Binding IsHistoryDelete,Converter={StaticResource NoHisConver}}">暂无历史记录！</TextBlock>
                     </StackPanel>
                 </ScrollViewer>
-
                 <Button Click="HistoryDelete_Click" Visibility="{Binding IsHistoryDelete,Converter={StaticResource HisConver}}"  HorizontalAlignment="Right" Width="25" Height="25"  x:Name="HistoryDelete">
                     <Image RenderOptions.BitmapScalingMode="Fant" Source="/data/trash.png"></Image>
                 </Button>
@@ -71,7 +92,6 @@
                 <ColumnDefinition></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
             </Grid.ColumnDefinitions>
-
             <WrapPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3">
                 <Menu x:Name="Menu" Background="Transparent" HorizontalAlignment="Left" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
                     <MenuItem Height="25">
@@ -106,15 +126,12 @@
                 <ToggleButton IsChecked="False" x:Name="TopButton" Background="#f0f0f0" BorderThickness="0" Margin="10,0,0,0" Click="Top_Click">
                     <Image RenderOptions.BitmapScalingMode="Fant" UseLayoutRounding="True" Width="20" Height="20" Source="/data/top.png"></Image>
                 </ToggleButton>
-                
             </WrapPanel>
             <ToggleButton Grid.Column="3" IsChecked="False" x:Name="BaseHistory" Click="BaseHistory_Click" BorderThickness="0" Margin="0,0,5,0" HorizontalAlignment="Right" VerticalAlignment="Center" Background="#f0f0f0">
                 <Image RenderOptions.BitmapScalingMode="Fant" UseLayoutRounding="True" Width="20" Height="20" Source="/data/history.png"></Image>
             </ToggleButton>
-
             <TextBlock Grid.Row="1" Grid.ColumnSpan="4" Name="Process" FontSize="15" VerticalAlignment="Center" Padding="0,0,10,0" HorizontalAlignment="Right" Text="{Binding ProcessContent}" ></TextBlock>
             <TextBox Grid.Row="2" Grid.ColumnSpan="4" Name="Result" FontSize="40" BorderThickness="0" Padding="5" Background="Transparent" HorizontalAlignment="Right" Text="{Binding ResultContent}"></TextBox>
-
             <Grid Name="Grid" Margin="5"  Grid.Row="3" Grid.RowSpan="6" Grid.Column="0" Grid.ColumnSpan="4">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"></RowDefinition>
@@ -130,75 +147,51 @@
                     <ColumnDefinition></ColumnDefinition>
                     <ColumnDefinition></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-            <local:OrdinaryButton  Grid.Row="0" Grid.Column="0" Content="%"  Click="Persent_Click"></local:OrdinaryButton>
-            <local:OrdinaryButton  Grid.Row="0" Grid.Column="1" Content="CE"  Click="CE_Click"></local:OrdinaryButton>
-            <local:OrdinaryButton  Grid.Row="0" Grid.Column="2" Content="C"  Click="C_Click"></local:OrdinaryButton>
-            <local:OrdinaryButton  Grid.Row="0" Grid.Column="3"   Click="Delete_Click">
-                <Image RenderOptions.BitmapScalingMode="Fant" Width="25" Height="25" Source="/data/backspace.png"></Image>
-            </local:OrdinaryButton>
-
-            <local:OrdinaryButton x:Name="denominator"  Grid.Row="1" Grid.Column="0" Content="1/x"  Click="SingleNumOperation_Click"></local:OrdinaryButton>
-            <local:OrdinaryButton x:Name="square"  Grid.Row="1" Grid.Column="1" Content="x²"  Click="SingleNumOperation_Click"></local:OrdinaryButton>
-            <local:OrdinaryButton x:Name="radical"  Grid.Row="1" Grid.Column="2" Click="SingleNumOperation_Click">
-                <Image RenderOptions.BitmapScalingMode="Fant" Width="50" Height="50" Source="/data/radical.png"></Image>
-            </local:OrdinaryButton>
-            <local:DoubleButton  Grid.Row="1" Grid.Column="3" Content="÷"  Click="DoubleNumOperation_Click"></local:DoubleButton>
-
-            <local:NumButton   Grid.Row="2" Grid.Column="0" Content="7" Click="Num_Click"></local:NumButton>
-            <local:NumButton Grid.Row="2" Grid.Column="1" Content="8"  Click="Num_Click"></local:NumButton>
-            <local:NumButton Grid.Row="2" Grid.Column="2" Content="9"  Click="Num_Click"></local:NumButton>
-            <local:DoubleButton Grid.Row="2" Grid.Column="3" Content="×" Click="DoubleNumOperation_Click"></local:DoubleButton>
-
-            <local:NumButton Grid.Row="3" Grid.Column="0" Content="4"  Click="Num_Click"></local:NumButton>
-            <local:NumButton Grid.Row="3" Grid.Column="1" Content="5"  Click="Num_Click"></local:NumButton>
-            <local:NumButton Grid.Row="3" Grid.Column="2" Content="6"  Click="Num_Click"></local:NumButton>
-            <local:DoubleButton  Grid.Row="3" Grid.Column="3" Content="-" Click="DoubleNumOperation_Click"/>
-
-            <local:NumButton Grid.Row="4" Grid.Column="0" Content="1"   Click="Num_Click"></local:NumButton>
-            <local:NumButton Grid.Row="4" Grid.Column="1" Content="2"  Click="Num_Click"></local:NumButton>
-            <local:NumButton Grid.Row="4" Grid.Column="2" Content="3"  Click="Num_Click"></local:NumButton>
-            <local:DoubleButton  Grid.Row="4" Grid.Column="3" Content="+" Click="DoubleNumOperation_Click"></local:DoubleButton>
-
-            <local:NumButton x:Name="negation" Grid.Row="5" Grid.Column="0" Click="Negation_Click">
-                <Image RenderOptions.BitmapScalingMode="Fant" Width="20" Height="20" Source="/data/negation.png"></Image>
-            </local:NumButton>
-            <local:NumButton Grid.Row="5" Grid.Column="1" Content="0"  Click="Num_Click"></local:NumButton>
-            <local:NumButton Grid.Row="5" Grid.Column="2" Content="."  Click="Point_Click"></local:NumButton>
-            <local:OrdinaryButton Grid.Row="5" Grid.Column="3" Content="="  Background="#91C1E8" Click="Result_Click"></local:OrdinaryButton>
-            
+                <Button Style="{StaticResource OrdinaryButton}"  Grid.Row="0" Grid.Column="0" Content="%"  Click="Persent_Click"></Button>
+                <Button Style="{StaticResource OrdinaryButton}"  Grid.Row="0" Grid.Column="1" Content="CE"  Click="CE_Click"></Button>
+                <Button Style="{StaticResource OrdinaryButton}"  Grid.Row="0" Grid.Column="2" Content="C"  Click="C_Click"></Button>
+                <Button Style="{StaticResource OrdinaryButton}"  Grid.Row="0" Grid.Column="3"   Click="Delete_Click">
+                    <Image RenderOptions.BitmapScalingMode="Fant" Width="25" Height="25" Source="/data/backspace.png"></Image>
+                </Button>
+                <Button Style="{StaticResource OrdinaryButton}" x:Name="denominator"  Grid.Row="1" Grid.Column="0" Content="1/x"  Click="SingleNumOperation_Click"></Button>
+                <Button Style="{StaticResource OrdinaryButton}" x:Name="square"  Grid.Row="1" Grid.Column="1" Content="x²"  Click="SingleNumOperation_Click"></Button>
+                <Button Style="{StaticResource OrdinaryButton}" x:Name="radical"  Grid.Row="1" Grid.Column="2" Click="SingleNumOperation_Click">
+                    <Image RenderOptions.BitmapScalingMode="Fant" Width="50" Height="50" Source="/data/radical.png"></Image>
+                </Button>
+                <Button Style="{StaticResource DoubleButton}"  Grid.Row="1" Grid.Column="3" Content="÷"  Click="DoubleNumOperation_Click"></Button>
+                <Button Style="{StaticResource NumButton}"   Grid.Row="2" Grid.Column="0" Content="7" Click="Num_Click"></Button>
+                <Button Style="{StaticResource NumButton}" Grid.Row="2" Grid.Column="1" Content="8"  Click="Num_Click"></Button>
+                <Button Style="{StaticResource NumButton}" Grid.Row="2" Grid.Column="2" Content="9"  Click="Num_Click"></Button>
+                <Button Style="{StaticResource DoubleButton}" Grid.Row="2" Grid.Column="3" Content="×" Click="DoubleNumOperation_Click"></Button>
+                <Button Style="{StaticResource NumButton}" Grid.Row="3" Grid.Column="0" Content="4"  Click="Num_Click"></Button>
+                <Button Style="{StaticResource NumButton}" Grid.Row="3" Grid.Column="1" Content="5"  Click="Num_Click"></Button>
+                <Button Style="{StaticResource NumButton}" Grid.Row="3" Grid.Column="2" Content="6"  Click="Num_Click"></Button>
+                <Button Style="{StaticResource DoubleButton}"  Grid.Row="3" Grid.Column="3" Content="-" Click="DoubleNumOperation_Click"/>
+                <Button Style="{StaticResource NumButton}" Grid.Row="4" Grid.Column="0" Content="1"   Click="Num_Click"></Button>
+                <Button Style="{StaticResource NumButton}" Grid.Row="4" Grid.Column="1" Content="2"  Click="Num_Click"></Button>
+                <Button Style="{StaticResource NumButton}" Grid.Row="4" Grid.Column="2" Content="3"  Click="Num_Click"></Button>
+                <Button Style="{StaticResource DoubleButton}" Grid.Row="4" Grid.Column="3" Content="+" Click="DoubleNumOperation_Click"></Button>
+                <Button Style="{StaticResource NumButton}" x:Name="negation" Grid.Row="5" Grid.Column="0" Click="Negation_Click">
+                    <Image RenderOptions.BitmapScalingMode="Fant" Width="20" Height="20" Source="/data/negation.png"></Image>
+                </Button>
+                <Button Style="{StaticResource NumButton}" Grid.Row="5" Grid.Column="1" Content="0"  Click="Num_Click"></Button>
+                <Button Style="{StaticResource NumButton}" Grid.Row="5" Grid.Column="2" Content="."  Click="Point_Click"></Button>
+                <Button Style="{StaticResource OrdinaryButton}" Grid.Row="5" Grid.Column="3" Content="="  Background="#91C1E8" Click="Result_Click"></Button>
             </Grid>
-
             <StackPanel Grid.Row="3" Grid.RowSpan="6" Grid.Column="0" Grid.ColumnSpan="4" Margin="5" Focusable="True" Background="#D9D9D9" Name="BaseHisPanel" Visibility="Collapsed">
                 <ScrollViewer x:Name="BaseScrollviewer">
                     <StackPanel>
-                    <ListBox BorderThickness="0" HorizontalContentAlignment="Right" SelectionChanged="HistoryContent_SelectionChanged" Background="#D9D9D9" Name="BaseHistoryContent" 
+                        <ListBox BorderThickness="0" HorizontalContentAlignment="Right" SelectionChanged="HistoryContent_SelectionChanged" Background="#D9D9D9" Name="BaseHistoryContent" 
                              ItemsSource="{Binding HistoryList}" Visibility="{Binding IsHistoryDelete,Converter={StaticResource HisConver}}"  
                              ItemTemplate="{StaticResource HistoryItem}">
-                       
-
-                    </ListBox>
-
+                        </ListBox>
                         <TextBlock Name="BaseNoHistory" Visibility="{Binding IsHistoryDelete,Converter={StaticResource NoHisConver}}">暂无历史记录！</TextBlock>
-
-
                     </StackPanel>
-
-
-
-
                 </ScrollViewer>
                 <Button  BorderThickness="0" Background="#d9d9d9" Margin="5" Click="HistoryDelete_Click" Visibility="{Binding IsHistoryDelete,Converter={StaticResource HisConver}}"  HorizontalAlignment="Right" Width="25" Height="25"  x:Name="BaseHistoryDelete">
                     <Image RenderOptions.BitmapScalingMode="Fant" Source="/data/trash.png"></Image>
                 </Button>
             </StackPanel>
         </Grid>
-
     </DockPanel>
-
-
-
-
-
-
-
 </Window>
